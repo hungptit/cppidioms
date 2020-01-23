@@ -1,6 +1,11 @@
 PROJECT(unittests)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
+find_program(CCACHE_PROGRAM ccache)
+if (CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif()
+
 set(CMAKE_INSTALL_PREFIX "$ENV{HOME}")
 set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../")
 set(EXTERNAL_DIR "${ROOT_DIR}/3p")
@@ -71,7 +76,7 @@ include_directories ("${EXTERNAL_DIR}/include")
 include_directories ("${SRC_DIR}")
 
 # Unittests
-set(SRC_FILES custom_deleter shared_ptr std_vector_back)
+set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime)
 foreach (src_file ${SRC_FILES})
   ADD_EXECUTABLE(${src_file} ${src_file}.cpp)
   TARGET_LINK_LIBRARIES(${src_file})
