@@ -67,6 +67,7 @@ add_cxx_compiler_flag(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
 # Build using static libraries to reduce dependency.
 add_cxx_compiler_flag(-flto)
 add_cxx_compiler_flag(-static)
+add_cxx_compiler_flag(-fsanitize=address)
 
 ENABLE_TESTING()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -76,7 +77,7 @@ include_directories ("${EXTERNAL_DIR}/include")
 include_directories ("${SRC_DIR}")
 
 # Unittests
-set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime)
+set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr)
 foreach (src_file ${SRC_FILES})
   ADD_EXECUTABLE(${src_file} ${src_file}.cpp)
   TARGET_LINK_LIBRARIES(${src_file})
