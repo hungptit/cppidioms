@@ -10,3 +10,7 @@
 	path = 3p/src/fmt
 	url = https://github.com/fmtlib/fmt
 	branch = master
+[submodule "3p/src/Lyra"]
+	path = 3p/src/Lyra
+	url = https://github.com/bfgroup/Lyra.git
+	branch = master

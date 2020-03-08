@@ -77,7 +77,7 @@ include_directories ("${EXTERNAL_DIR}/include")
 include_directories ("${SRC_DIR}")
 
 # Unittests
-set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr)
+set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr accumulate avoid_boost_optional use_clara enum_values)
 foreach (src_file ${SRC_FILES})
   ADD_EXECUTABLE(${src_file} ${src_file}.cpp)
   TARGET_LINK_LIBRARIES(${src_file})

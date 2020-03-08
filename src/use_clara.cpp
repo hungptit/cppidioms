@@ -19,8 +19,11 @@ std::ostream &operator<<(std::ostream &os, const Params &params) {
 int main(int argc, char *argv[]) {
     Params params;
     bool show_help_message = false;
+    bool show_version = false;
 
-    auto cli = clara::Help(show_help_message) | clara::Opt(params.age, "age")["-a"]["--age"]("Employee's age.") |
+    auto cli = clara::Help(show_help_message) |
+               clara::Opt(show_version)["-v"]["--version"]("Show the version of this example") |
+               clara::Opt(params.age, "age")["-a"]["--age"]("Employee's age.") |
                clara::Opt(params.salary, "salary")["-s"]["--salary"]("Employee's salary.") |
                clara::Opt(params.manager)["-m"]["--manager"]("Is manager?") |
                clara::Arg(params.full_name, "Full name")("Employee full name.");
@@ -33,6 +36,11 @@ int main(int argc, char *argv[]) {
     if (show_help_message || !result) {
         std::cout << cli << "\n";
         return EXIT_FAILURE;
+    }
+
+    if (show_version) {
+        std::cout << "Version: 1.92\n";
+        return EXIT_SUCCESS;
     }
 
     std::cout << params;
