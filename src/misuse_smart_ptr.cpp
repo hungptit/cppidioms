@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <memory>
 #include <set>
 
@@ -31,23 +32,19 @@ struct Object {
     }
 
     std::string data;
+    static Object* create(const std::string &data) {
+        return new Object(data);
+    }
 };
 
+void shared_ptr_case() {
+    using Map = std::map<int, std::shared_ptr<Object>>;
+    auto obj2 = Object::create("obj2");
+    Map map{{0, std::make_shared<Object>("First item")}};
+    map.insert(std::make_pair(0, obj2));
+    obj2->print("Should segv");
+}
+
 int main() {
-    Object obj1("A");
-    Object obj2("B");
-    Object obj3("C");
-    Object obj4("D");
-
-    std::map<int, Object> map;
-    map.emplace(0, obj1);
-
-    // // This call does not make any copy
-    // map.emplace(0, obj2);
-
-    // // This call does make a copy
-    // map.insert(std::make_pair(0, obj3));
-
-    // // This call does make a copy
-    // map[0] = obj4;
+    shared_ptr_case();
 }
