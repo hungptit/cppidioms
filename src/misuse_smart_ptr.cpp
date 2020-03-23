@@ -1,8 +1,8 @@
 #include <iostream>
 #include <map>
-#include <unordered_map>
 #include <memory>
 #include <set>
+#include <unordered_map>
 
 struct Object {
     ~Object() { std::cout << "Destructor: " << data << "\n"; }
@@ -19,22 +19,22 @@ struct Object {
         std::cout << "Copy constructor: " << data << "\n";
     }
 
-    Object& operator=(const Object &obj) {
+    Object &operator=(const Object &obj) {
         data = obj.data;
         std::cout << "Copy assignment constructor: " << data << "\n";
         return *this;
     }
 
-    Object& operator=(Object &&obj) {
+    Object &operator=(Object &&obj) {
         data = std::move(obj.data);
         std::cout << "Copy assignment constructor: " << data << "\n";
         return *this;
     }
 
+    void print(const std::string &) {}
+
     std::string data;
-    static Object* create(const std::string &data) {
-        return new Object(data);
-    }
+    static Object *create(const std::string &data) { return new Object(data); }
 };
 
 void shared_ptr_case() {
@@ -45,6 +45,4 @@ void shared_ptr_case() {
     obj2->print("Should segv");
 }
 
-int main() {
-    shared_ptr_case();
-}
+int main() { shared_ptr_case(); }
