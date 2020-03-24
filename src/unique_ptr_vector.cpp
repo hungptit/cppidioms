@@ -32,12 +32,6 @@ int main() {
         (*it)->print();
     }
 
-    std::vector<std::unique_ptr<Base>> list2{std::unique_ptr<Base>(new A()), std::unique_ptr<Base>(new B()),
-                                                   std::unique_ptr<Base>(new C())};
-    for (auto it = list1.begin(); it != list1.end(); ++it) {
-        (*it)->print();
-    }
-
     std::vector<std::unique_ptr<Base>> list3;
     list3.emplace_back(new A());
     list3.emplace_back(new B());
@@ -45,4 +39,11 @@ int main() {
     for (auto it = list3.begin(); it != list3.end(); ++it) {
         (*it)->print();
     }
+
+    // TODO: This does not work. Is there any elegant solution for vector?
+    // std::vector<std::unique_ptr<Base>> list2{std::unique_ptr<Base>(new A()), std::unique_ptr<Base>(new B()),
+    //                                          std::unique_ptr<Base>(new C())};
+    // for (auto it = list1.begin(); it != list1.end(); ++it) {
+    //     (*it)->print();
+    // }
 }
