@@ -14,3 +14,11 @@
 	path = 3p/src/Lyra
 	url = https://github.com/bfgroup/Lyra.git
 	branch = master
+[submodule "3p/src/quill"]
+	path = 3p/src/quill
+	url = https://github.com/odygrd/quill.git
+	branch = master
+[submodule "3p/src/benchmark"]
+	path = 3p/src/benchmark
+	url = https://github.com/google/benchmark.git
+	branch = master

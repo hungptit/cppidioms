@@ -12,3 +12,6 @@ printf "Build benchmark\n"
 
 printf "Setup Clara\n"
 cp src/Clara/include/*.hpp include/
+
+printf "Setup quill\n"
+./build_using_cmake.sh quill

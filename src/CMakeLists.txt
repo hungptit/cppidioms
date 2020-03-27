@@ -40,10 +40,10 @@ add_cxx_compiler_flag(-O3)
 add_cxx_compiler_flag(-march=native)
 
 # Enable other flags
-add_cxx_compiler_flag(-std=c++14)
+add_cxx_compiler_flag(-std=c++17)
 add_cxx_compiler_flag(-Wall)
-add_cxx_compiler_flag(-pedantic)
-add_cxx_compiler_flag(-pedantic-errors)
+# add_cxx_compiler_flag(-pedantic)
+# add_cxx_compiler_flag(-pedantic-errors)
 add_cxx_compiler_flag(-fstrict-aliasing)
 # add_cxx_compiler_flag(-fsanitize=address)
 
@@ -57,8 +57,8 @@ if (HAVE_WTHREAD_SAFETY)
 endif()
 
 # These flags are used to optimize the binary size.
-add_cxx_compiler_flag(-fno-exceptions)
-add_cxx_compiler_flag(--fno-rtti)
+# add_cxx_compiler_flag(-fno-exceptions)
+# add_cxx_compiler_flag(--fno-rtti)
 
 # Customized flags
 add_cxx_compiler_flag(-DFMT_HEADER_ONLY)
@@ -76,11 +76,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories ("${EXTERNAL_DIR}/include")
 include_directories ("${SRC_DIR}")
 
+find_library(QUILL libquill.a "../3p/lib*" NO_DEFAULT_PATH)
+message(${QUILL})
+
 # Unittests
-set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr accumulate avoid_boost_optional use_clara enum_values)
+set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr accumulate avoid_boost_optional use_clara enum_values test_quill)
 foreach (src_file ${SRC_FILES})
   ADD_EXECUTABLE(${src_file} ${src_file}.cpp)
-  TARGET_LINK_LIBRARIES(${src_file})
+  TARGET_LINK_LIBRARIES(${src_file} ${QUILL} -lpthread)
   ADD_TEST(${src_file} ./${src_file})
 endforeach (src_file)
 INSTALL_PROGRAMS("/bin/" FILES ${SRC_FILES})
