@@ -33,16 +33,16 @@ SET(CMAKE_CXX_COMPILER clang++)
 # SET(CMAKE_CXX_COMPILER g++-9)
 # add_cxx_compiler_flag(-stdlib=libc++)
 
-# set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Debug)
 
-set (CMAKE_BUILD_TYPE Release)
-add_cxx_compiler_flag(-O3)
+# set (CMAKE_BUILD_TYPE Release)
+# add_cxx_compiler_flag(-O3)
 add_cxx_compiler_flag(-march=native)
 
 # Enable other flags
 add_cxx_compiler_flag(-std=c++17)
 add_cxx_compiler_flag(-Wall)
-# add_cxx_compiler_flag(-pedantic)
+add_cxx_compiler_flag(-pedantic)
 # add_cxx_compiler_flag(-pedantic-errors)
 add_cxx_compiler_flag(-fstrict-aliasing)
 # add_cxx_compiler_flag(-fsanitize=address)
@@ -74,13 +74,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include folders
 include_directories ("${EXTERNAL_DIR}/include")
+include_directories ("${EXTERNAL_DIR}/include/eigen3")
 include_directories ("${SRC_DIR}")
 
 find_library(QUILL libquill.a "../3p/lib*" NO_DEFAULT_PATH)
 message(${QUILL})
 
 # Unittests
-set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr accumulate avoid_boost_optional use_clara enum_values test_quill)
+set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate
+    move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr accumulate avoid_boost_optional
+    use_clara enum_values eigen_ops eigen_matrix unique_ptr_vector test_quill)
+
 foreach (src_file ${SRC_FILES})
   ADD_EXECUTABLE(${src_file} ${src_file}.cpp)
   TARGET_LINK_LIBRARIES(${src_file} ${QUILL} -lpthread)

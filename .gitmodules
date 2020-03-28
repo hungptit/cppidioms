@@ -22,3 +22,7 @@
 	path = 3p/src/benchmark
 	url = https://github.com/google/benchmark.git
 	branch = master
+[submodule "3p/src/eigen"]
+	path = 3p/src/eigen
+	url = https://gitlab.com/libeigen/eigen.git
+	branch = master

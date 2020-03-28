@@ -42,7 +42,7 @@ void shared_ptr_case() {
     auto obj2 = Object::create("obj2");
     Map map{{0, std::make_shared<Object>("First item")}};
     map.insert(std::make_pair(0, obj2));
-    obj2->print("Should segv");
+    obj2->print();
 }
 
 int main() { shared_ptr_case(); }

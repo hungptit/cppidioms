@@ -1,3 +1,4 @@
+#include <iostream>
 #include "quill/Quill.h"
 
 /**
@@ -29,7 +30,7 @@ int main()
     LOG_ERROR(logger, "This is a log error example {}", 7);
     LOG_CRITICAL(logger, "This is a log critical example {}", 8);
   }
-
+  
   // b) Or like this
   {
     LOG_TRACE_L3(quill::get_logger(), "This is a log trace l3 example {}", 1);
