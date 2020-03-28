@@ -29,7 +29,7 @@ include(CheckCXXCompilerFlag)
 include(AddCXXCompilerFlag)
 include(CXXFeatureCheck)
 
-SET(CMAKE_CXX_COMPILER clang++)
+# SET(CMAKE_CXX_COMPILER clang++)
 # SET(CMAKE_CXX_COMPILER g++-9)
 # add_cxx_compiler_flag(-stdlib=libc++)
 
