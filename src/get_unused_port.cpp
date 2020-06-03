@@ -10,8 +10,9 @@ namespace {
         UnusedPort() {
             for (int attempt = 0; attempt < NUMBER_OF_TRIES; ++attempt) {
                 port_ = get_unused_port();
-                std::cout << port_ << "\n";
+                if (port_ > PORT_LOWER_BOUND && port_ < PORT_UPPER_BOUND) break;
             }
+            std::cout << port_ << "\n";
         }
 
         int get_unused_port() {
@@ -44,11 +45,13 @@ namespace {
             return addr.sin_port;
         }
 
-        static constexpr int PORT_LOWER_BOUND = 1024;
+        static constexpr int PORT_LOWER_BOUND = 49151;
         static constexpr int PORT_UPPER_BOUND = 65535;
-        static constexpr int NUMBER_OF_TRIES  = 1000;
-        int                  port_            = -1;
-        int                  fd_              = -1;
+        // 1000 is a big number and the chane for us not to get a valid port number is almost 0. If the random port
+        // number distribution is uniform.
+        static constexpr int NUMBER_OF_TRIES = 1000;
+        int                  port_           = -1;
+        int                  fd_             = -1;
     };
 } // namespace
 
