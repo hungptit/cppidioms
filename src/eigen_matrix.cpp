@@ -15,14 +15,8 @@ int main() {
     std::cout << mx << "\n";
 
     Matrix3f my;
-    // clang-format off
-    my << 1, 2, 3
-       << 4, 5, 6
-       << 7, 8, 9;
-    // clang-format on
-    std::cout << mx << "\n";
-    std::cout << mx + my << "\n";
-
-    // x.array().exp();
-    // std::cout << "exp(x)" << x << "\n";
+    my = mx.transpose();
+    std::cout << "mx:\n" << mx << "\n";
+    std::cout << "my:\n" << my << "\n";
+    std::cout << "mx + my:\n" << my + mx << "\n";
 }
