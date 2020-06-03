@@ -55,7 +55,7 @@ if (HAVE_WTHREAD_SAFETY)
 endif()
 
 # These flags are used to optimize the binary size.
-add_cxx_compiler_flag(-fno-exceptions)
+# add_cxx_compiler_flag(-fno-exceptions)
 add_cxx_compiler_flag(--fno-rtti)
 
 # Customized flags
