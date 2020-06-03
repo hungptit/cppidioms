@@ -19,7 +19,7 @@ namespace cppidioms {
 
       private:
         UnusedPort() {
-            for (int attempt = 0; attempt < NUMBER_OF_TRIES; ++attempt) {
+            for(int attempt = 0; attempt < NUMBER_OF_TRIES; ++attempt) {
                 const auto port_number = get_unused_port();
                 if (port_number > PORT_LOWER_BOUND && port_number < PORT_UPPER_BOUND) {
                     port_ = port_number;
@@ -28,8 +28,6 @@ namespace cppidioms {
             }
         }
 
-        
-                
         int get_unused_port() {
             fd_ = socket(AF_INET, SOCK_DGRAM, 0);
             if (fd_ == -1) {
