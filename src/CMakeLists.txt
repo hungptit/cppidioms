@@ -29,23 +29,21 @@ include(CheckCXXCompilerFlag)
 include(AddCXXCompilerFlag)
 include(CXXFeatureCheck)
 
-# SET(CMAKE_CXX_COMPILER clang++)
+SET(CMAKE_CXX_COMPILER clang++)
 # SET(CMAKE_CXX_COMPILER g++-9)
-# add_cxx_compiler_flag(-stdlib=libc++)
+add_cxx_compiler_flag(-stdlib=libc++)
 
-# set(CMAKE_BUILD_TYPE Debug)
-
-set (CMAKE_BUILD_TYPE Release)
-add_cxx_compiler_flag(-O3)
-add_cxx_compiler_flag(-march=native)
+set(CMAKE_BUILD_TYPE Debug)
+# set (CMAKE_BUILD_TYPE Release)
+# add_cxx_compiler_flag(-O3)
+# add_cxx_compiler_flag(-march=native)
 
 # Enable other flags
 add_cxx_compiler_flag(-std=c++14)
 add_cxx_compiler_flag(-Wall)
 add_cxx_compiler_flag(-pedantic)
-# add_cxx_compiler_flag(-pedantic-errors)
+add_cxx_compiler_flag(-pedantic-errors)
 add_cxx_compiler_flag(-fstrict-aliasing)
-# add_cxx_compiler_flag(-fsanitize=address)
 
 if (HAVE_CXX_FLAG_FSTRICT_ALIASING)
   add_cxx_compiler_flag(-Wstrict-aliasing)
@@ -67,6 +65,8 @@ add_cxx_compiler_flag(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
 # Build using static libraries to reduce dependency.
 add_cxx_compiler_flag(-flto)
 add_cxx_compiler_flag(-static)
+
+# Build with ASAN by default
 add_cxx_compiler_flag(-fsanitize=address)
 
 ENABLE_TESTING()
@@ -86,4 +86,4 @@ foreach (src_file ${SRC_FILES})
   TARGET_LINK_LIBRARIES(${src_file})
   ADD_TEST(${src_file} ./${src_file})
 endforeach (src_file)
-INSTALL_PROGRAMS("/bin/" FILES ${SRC_FILES})
+
