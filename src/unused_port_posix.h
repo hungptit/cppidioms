@@ -13,15 +13,18 @@ namespace cppidioms {
       public:
         static int port() {
             UnusedPort unused_port;
-            if (unused_port.port_ < 0) throw std::runtime_error("Cannot find an unused port.");
+            if (unused_port.port_ < 0) throw std::runtime_error("Cannot find a valid unused port.");
             return unused_port.port_;
         }
 
       private:
         UnusedPort() {
             for (int attempt = 0; attempt < NUMBER_OF_TRIES; ++attempt) {
-                port_ = get_unused_port();
-                if (port_ > PORT_LOWER_BOUND && port_ < PORT_UPPER_BOUND) break;
+                const auto port_number = get_unused_port();
+                if (port_number > PORT_LOWER_BOUND && port_number < PORT_UPPER_BOUND) {
+                    port_ = port_number;
+                    break;
+                }
             }
         }
 
