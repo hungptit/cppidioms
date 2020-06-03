@@ -33,7 +33,7 @@ namespace {
                 ::close(fd_);
                 return -1;
             }
-            // Query the socket for its port, which will be returned by `port()`.
+            // Query the socket for its port
             int r2 = getsockname(fd_, reinterpret_cast<struct sockaddr *>(&addr), &addr_len);
             if (r2 != 0) {
                 std::cerr << "getsockname error: " << strerror(errno) << "\n";
