@@ -6,6 +6,8 @@ if (CCACHE_PROGRAM)
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
 endif()
 
+set(POSITION_INDEPENDENT_CODE ON)
+
 set(CMAKE_INSTALL_PREFIX "$ENV{HOME}")
 set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../")
 set(EXTERNAL_DIR "${ROOT_DIR}/3p")
@@ -80,7 +82,7 @@ include_directories ("${SRC_DIR}")
 # Unittests
 set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate
     move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr accumulate avoid_boost_optional
-    use_clara enum_values eigen_ops eigen_matrix unique_ptr_vector test_ifstream get_unused_port is_base_of)
+    use_clara enum_values eigen_ops eigen_matrix unique_ptr_vector test_ifstream get_unused_port is_base_of interface_class)
 foreach (src_file ${SRC_FILES})
   ADD_EXECUTABLE(${src_file} ${src_file}.cpp)
   TARGET_LINK_LIBRARIES(${src_file})
