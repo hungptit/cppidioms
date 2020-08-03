@@ -35,7 +35,7 @@ set(CMAKE_CXX_COMPILER clang++)
 # SET(CMAKE_CXX_COMPILER g++-9)
 add_cxx_compiler_flag(-stdlib=libc++)
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 # set (CMAKE_BUILD_TYPE Release) add_cxx_compiler_flag(-O3)
 # add_cxx_compiler_flag(-march=native)
 
@@ -101,6 +101,7 @@ set(CPP_FILES
     test_ifstream
     get_unused_port
     is_base_of
+    get_line
     interface_class)
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
