@@ -1,20 +1,19 @@
+#include <cstdint>
 #include <iostream>
 #include <memory>
-#include <spawn.h>
 
-struct PosixFileActions {
-    // PosixFileActions() {
-    //     posix_spawn_file_actions_init(&fileActions);
-    // }
-    PosixFileActions() : fileActions() {}
-
-    ~PosixFileActions() {
-        posix_spawn_file_actions_destroy(&fileActions);
-    }
-    posix_spawn_file_actions_t fileActions;
+struct Test {
+  Test() = default;
+  ~Test() = default;
+  void finish() const { std::cout << "finished\n"; }
+  enum MyEnum : uint32_t { NONE = 0, ONE = 1 };
 };
 
+struct CustomDeleter {
+  void operator()(Test* test) const { test->finish(); }
+};
 
 int main() {
-    PosixFileActions fileActions;
+  std::unique_ptr<Test> p1(new Test());
+  std::unique_ptr<Test, CustomDeleter> p2(new Test(), CustomDeleter());
 }

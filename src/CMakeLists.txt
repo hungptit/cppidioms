@@ -1,10 +1,12 @@
-PROJECT(unittests)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+project(unittests)
+cmake_minimum_required(VERSION 3.0)
 
 find_program(CCACHE_PROGRAM ccache)
-if (CCACHE_PROGRAM)
-    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+if(CCACHE_PROGRAM)
+  set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
 endif()
+
+set(POSITION_INDEPENDENT_CODE ON)
 
 set(CMAKE_INSTALL_PREFIX "$ENV{HOME}")
 set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../")
@@ -29,35 +31,32 @@ include(CheckCXXCompilerFlag)
 include(AddCXXCompilerFlag)
 include(CXXFeatureCheck)
 
-# SET(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_CXX_COMPILER clang++)
 # SET(CMAKE_CXX_COMPILER g++-9)
-# add_cxx_compiler_flag(-stdlib=libc++)
+add_cxx_compiler_flag(-stdlib=libc++)
 
-# set(CMAKE_BUILD_TYPE Debug)
-
-set (CMAKE_BUILD_TYPE Release)
-add_cxx_compiler_flag(-O3)
-add_cxx_compiler_flag(-march=native)
+set(CMAKE_BUILD_TYPE Debug)
+# set (CMAKE_BUILD_TYPE Release) add_cxx_compiler_flag(-O3)
+# add_cxx_compiler_flag(-march=native)
 
 # Enable other flags
 add_cxx_compiler_flag(-std=c++14)
 add_cxx_compiler_flag(-Wall)
 add_cxx_compiler_flag(-pedantic)
-# add_cxx_compiler_flag(-pedantic-errors)
+add_cxx_compiler_flag(-pedantic-errors)
 add_cxx_compiler_flag(-fstrict-aliasing)
-# add_cxx_compiler_flag(-fsanitize=address)
 
-if (HAVE_CXX_FLAG_FSTRICT_ALIASING)
+if(HAVE_CXX_FLAG_FSTRICT_ALIASING)
   add_cxx_compiler_flag(-Wstrict-aliasing)
 endif()
 
-if (HAVE_WTHREAD_SAFETY)
+if(HAVE_WTHREAD_SAFETY)
   add_definitions(-DHAVE_WTHREAD_SAFETY)
   cxx_feature_check(THREAD_SAFETY_ATTRIBUTES)
 endif()
 
 # These flags are used to optimize the binary size.
-add_cxx_compiler_flag(-fno-exceptions)
+# add_cxx_compiler_flag(-fno-exceptions)
 add_cxx_compiler_flag(--fno-rtti)
 
 # Customized flags
@@ -67,23 +66,121 @@ add_cxx_compiler_flag(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
 # Build using static libraries to reduce dependency.
 add_cxx_compiler_flag(-flto)
 add_cxx_compiler_flag(-static)
+
+# Build with ASAN by default
 add_cxx_compiler_flag(-fsanitize=address)
 
-ENABLE_TESTING()
+enable_testing()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include folders
-include_directories ("${EXTERNAL_DIR}/include")
-include_directories ("${EXTERNAL_DIR}/include/eigen3")
-include_directories ("${SRC_DIR}")
+include_directories("${EXTERNAL_DIR}/include")
+include_directories("${EXTERNAL_DIR}/include/eigen3")
+include_directories("${SRC_DIR}")
 
 # Unittests
-set(SRC_FILES custom_deleter shared_ptr std_vector_back singleton enable_if matrix generate
-    move_semantics numeric_limits function_arg_lifetime misuse_smart_ptr accumulate avoid_boost_optional
-    use_clara enum_values eigen_ops eigen_matrix unique_ptr_vector test_ifstream get_unused_port)
-foreach (src_file ${SRC_FILES})
-  ADD_EXECUTABLE(${src_file} ${src_file}.cpp)
-  TARGET_LINK_LIBRARIES(${src_file})
-  ADD_TEST(${src_file} ./${src_file})
-endforeach (src_file)
-INSTALL_PROGRAMS("/bin/" FILES ${SRC_FILES})
+set(CPP_FILES
+    custom_deleter
+    shared_ptr
+    std_vector_back
+    singleton
+    enable_if
+    matrix
+    generate
+    move_semantics
+    numeric_limits
+    function_arg_lifetime
+    misuse_smart_ptr
+    accumulate
+    avoid_boost_optional
+    use_clara
+    enum_values
+    eigen_ops
+    eigen_matrix
+    unique_ptr_vector
+    test_ifstream
+    get_unused_port
+    is_base_of
+    interface_class)
+foreach(src_file ${CPP_FILES})
+  add_executable(${src_file} ${src_file}.cpp)
+  target_link_libraries(${src_file})
+  add_test(${src_file} ./${src_file})
+endforeach(src_file)
+
+# Formating and linting all related files
+file(GLOB_RECURSE SRCS_AND_HDRS *.cpp *.hpp)
+list(FILTER SRCS_AND_HDRS EXCLUDE REGEX "local/")
+find_program(CLANG_FORMAT NAMES clang-format)
+add_custom_command(
+  OUTPUT .fmt_cpp_stamp
+  DEPENDS ${SRCS_AND_HDRS}
+  COMMAND
+    ${CLANG_FORMAT}
+    "-style={BasedOnStyle: google, DerivePointerAlignment: false}" -i
+    ${SRCS_AND_HDRS}
+  COMMAND touch .fmt_cpp_stamp
+  COMMENT "Format C++ files with clang-format."
+  VERBATIM)
+
+file(GLOB CMAKE_FILES CMakeLists.txt)
+find_program(CMAKE_FORMAT NAMES cmake-format)
+if(${CMAKE_FORMAT} STREQUAL "CMAKE_FORMAT-NOTFOUND")
+  add_custom_command(
+    OUTPUT .fmt_cmake_stamp
+    DEPENDS ${CMAKE_FILES}
+    COMMAND touch .fmt_cmake_stamp
+    COMMENT "Skip formatting CMake files."
+    VERBATIM)
+else()
+  add_custom_command(
+    OUTPUT .fmt_cmake_stamp
+    DEPENDS ${CMAKE_FILES}
+    COMMAND cmake-format -i ${CMAKE_FILES}
+    COMMAND touch .fmt_cmake_stamp
+    COMMENT "Format CMake files with cmake-format."
+    VERBATIM)
+endif()
+
+file(GLOB SH_SRCS ../3p/*.sh)
+find_program(SHFMT NAMES shfmt)
+if(${SHFMT} STREQUAL "SHFMT-NOTFOUND")
+  add_custom_command(
+    OUTPUT .fmt_bash_stamp
+    DEPENDS ${SH_SRCS}
+    COMMAND touch .fmt_bash_stamp
+    COMMENT "Skip formatting Bash scripts."
+    VERBATIM)
+else()
+  add_custom_command(
+    OUTPUT .fmt_bash_stamp
+    DEPENDS ${SH_SRCS}
+    COMMAND ${SHFMT} -i 2 -ci -w ${SH_SRCS}
+    COMMAND touch .fmt_bash_stamp
+    COMMENT "Format Bash scripts with shfmt."
+    VERBATIM)
+endif()
+
+add_custom_target(
+  fmt
+  DEPENDS .fmt_bash_stamp .fmt_cpp_stamp .fmt_cmake_stamp
+  COMMENT "Format Bash, C++, CMake, and Python files.")
+
+add_custom_command(
+  OUTPUT .lint_shellcheck_stamp
+  DEPENDS ${SH_SRCS}
+  COMMAND shellcheck ${SH_SRCS}
+  COMMAND touch .lint_shellcheck_stamp
+  COMMENT "Lint Bash files with shellcheck.")
+
+add_custom_command(
+  OUTPUT .lint_cmake_stamp
+  DEPENDS ${CMAKE_FILES}
+  COMMAND cmake-lint ${CMAKE_FILES}
+  COMMAND touch .lint_cmake_stamp
+  COMMENT "Lint CMake files with cmake-lint.")
+
+add_custom_target(
+  lint ALL
+  DEPENDS .lint_shellcheck_stamp .lint_cmake_stamp
+  COMMENT "Lint Bash and CMake files.")

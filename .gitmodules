@@ -14,3 +14,7 @@
 	path = 3p/src/Lyra
 	url = https://github.com/bfgroup/Lyra.git
 	branch = master
+[submodule "3p/src/benchmark"]
+	path = 3p/src/benchmark
+	url = https://github.com/google/benchmark.git
+	branch = master
