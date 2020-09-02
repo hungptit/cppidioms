@@ -31,9 +31,9 @@ include(CheckCXXCompilerFlag)
 include(AddCXXCompilerFlag)
 include(CXXFeatureCheck)
 
-set(CMAKE_CXX_COMPILER clang++)
+# set(CMAKE_CXX_COMPILER clang++)
 # SET(CMAKE_CXX_COMPILER g++-9)
-add_cxx_compiler_flag(-stdlib=libc++)
+# add_cxx_compiler_flag(-stdlib=libc++)
 
 set(CMAKE_BUILD_TYPE Release)
 # set (CMAKE_BUILD_TYPE Release) add_cxx_compiler_flag(-O3)
@@ -68,7 +68,7 @@ add_cxx_compiler_flag(-flto)
 add_cxx_compiler_flag(-static)
 
 # Build with ASAN by default
-add_cxx_compiler_flag(-fsanitize=address)
+# add_cxx_compiler_flag(-fsanitize=address)
 
 enable_testing()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -102,6 +102,7 @@ set(CPP_FILES
     get_unused_port
     is_base_of
     get_line
+    terminate_flush
     interface_class)
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
