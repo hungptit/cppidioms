@@ -20,4 +20,7 @@ int main() {
   std::cout << "mx:\n" << mx << "\n";
   std::cout << "my:\n" << my << "\n";
   std::cout << "mx + my:\n" << my + mx << "\n";
+  my.setIdentity();
+  std::cout << "Identity:\n" << my << "\n";
+  std::cout << "my[2,2]:\n" << my(2, 2) << "\n";
 }
