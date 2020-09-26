@@ -39,11 +39,12 @@ set(CMAKE_BUILD_TYPE Release)
 # add_cxx_compiler_flag(-march=native)
 
 # Enable other flags
-add_cxx_compiler_flag(-std=c++14)
+add_cxx_compiler_flag(-std=c++17)
 add_cxx_compiler_flag(-Wall)
 add_cxx_compiler_flag(-pedantic)
 add_cxx_compiler_flag(-pedantic-errors)
 add_cxx_compiler_flag(-fstrict-aliasing)
+add_cxx_compiler_flag(-static)
 
 if(HAVE_CXX_FLAG_FSTRICT_ALIASING)
   add_cxx_compiler_flag(-Wstrict-aliasing)
@@ -78,32 +79,33 @@ include_directories("${SRC_DIR}")
 
 # Unittests
 set(CPP_FILES
-    custom_deleter
-    shared_ptr
-    std_vector_back
-    singleton
-    enable_if
-    matrix
-    generate
-    move_semantics
-    numeric_limits
-    function_arg_lifetime
-    misuse_smart_ptr
     accumulate
     avoid_boost_optional
-    use_clara
-    enum_values
-    eigen_ops
+    custom_deleter
     eigen_matrix
-    unique_ptr_vector
-    test_ifstream
-    get_unused_port
-    is_base_of
-    get_line
+    eigen_ops
+    enable_if
+    enum_values
     epsilon
+    function_arg_lifetime
+    generate
+    get_line
+    get_unused_port
+    interface_class
+    is_base_of
+    matrix
+    misuse_smart_ptr
+    move_semantics
+    numeric_limits
+    pmr
+    shared_ptr
+    singleton
     stats
+    std_vector_back
     terminate_flush
-    interface_class)
+    test_ifstream
+    unique_ptr_vector
+    use_clara)
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
   target_link_libraries(${src_file})
