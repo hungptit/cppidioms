@@ -64,14 +64,14 @@ double variance(const std::vector<double>& data) {
 TEST_CASE("mean function") {
   SUBCASE("Empty array") {
     const std::vector<double> data{};
-    CHECK(isnan(stats::mean(data.cbegin(), data.cend())));
-    CHECK(isnan(stats::mean(data)));
+    CHECK(std::isnan(stats::mean(data.cbegin(), data.cend())));
+    CHECK(std::isnan(stats::mean(data)));
   }
 
   SUBCASE("NaN array") {
     const std::vector<double> data{stats::NaN, stats::NaN};
-    CHECK(isnan(stats::mean(data.cbegin(), data.cend())));
-    CHECK(isnan(stats::mean(data)));
+    CHECK(std::isnan(stats::mean(data.cbegin(), data.cend())));
+    CHECK(std::isnan(stats::mean(data)));
   }
 
   SUBCASE("One element vector") {
@@ -90,14 +90,14 @@ TEST_CASE("mean function") {
 TEST_CASE("variance function") {
   SUBCASE("Empty array") {
     const std::vector<double> data{};
-    CHECK(isnan(stats::variance(data.cbegin(), data.cend())));
-    CHECK(isnan(stats::variance(data)));
+    CHECK(std::isnan(stats::variance(data.cbegin(), data.cend())));
+    CHECK(std::isnan(stats::variance(data)));
   }
 
   SUBCASE("NaN array") {
     const std::vector<double> data{stats::NaN, stats::NaN};
-    CHECK(isnan(stats::variance(data.cbegin(), data.cend())));
-    CHECK(isnan(stats::variance(data)));
+    CHECK(std::isnan(stats::variance(data.cbegin(), data.cend())));
+    CHECK(std::isnan(stats::variance(data)));
   }
 
   SUBCASE("One element vector") {
