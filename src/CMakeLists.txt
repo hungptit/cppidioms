@@ -79,6 +79,7 @@ include_directories("${SRC_DIR}")
 # Unittests
 set(CPP_FILES
     accumulate
+    arg_parser
     avoid_boost_optional
     custom_deleter
     eigen_matrix
