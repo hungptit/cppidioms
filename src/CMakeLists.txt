@@ -44,7 +44,6 @@ add_cxx_compiler_flag(-Wall)
 add_cxx_compiler_flag(-pedantic)
 add_cxx_compiler_flag(-pedantic-errors)
 add_cxx_compiler_flag(-fstrict-aliasing)
-add_cxx_compiler_flag(-static)
 
 if(HAVE_CXX_FLAG_FSTRICT_ALIASING)
   add_cxx_compiler_flag(-Wstrict-aliasing)
