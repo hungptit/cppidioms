@@ -21,10 +21,17 @@ rm -rf "$APKG_BUILD_FOLDER"
 mkdir -p "$APKG_BUILD_FOLDER"
 
 pushd "$APKG_BUILD_FOLDER"
-$CMAKE "$APKG_SRC" -DCMAKE_INSTALL_PREFIX="$APKG_PREFIX" "$CMAKE_RELEASE_BUILD" "$CMAKE_OPTIONS"
-make "$BUILD_OPTS" "$EXTRA_MAKE_OPTIONS"
-make install
+set -x
 
+if [[ -z "$CMAKE_OPTIONS" ]]; then
+    $CMAKE "$APKG_SRC" -DCMAKE_INSTALL_PREFIX="$APKG_PREFIX" -DCMAKE_BUILD_TYPE=Release
+else
+    $CMAKE "$APKG_SRC" -DCMAKE_INSTALL_PREFIX="$APKG_PREFIX" -DCMAKE_BUILD_TYPE=Release "$CMAKE_OPTIONS"
+fi
+
+make "$BUILD_OPTS"
+make install
+set +x
 # Return to the original folder.
 popd
 
