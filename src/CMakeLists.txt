@@ -104,6 +104,7 @@ set(CPP_FILES
     std_vector_back
     terminate_flush
     test_ifstream
+    test_cppoptsolvers
     unique_ptr_vector
     use_clara)
 foreach(src_file ${CPP_FILES})

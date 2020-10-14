@@ -16,3 +16,7 @@ cp -rv src/doctest/doctest include/
 
 printf "Build libmdbx\n"
 ./build_using_cmake.sh libmdbx -DMDBX_INSTALL_STATIC=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang > /dev/null
+
+printf "Install cppoptlib\n"
+cp -rv src/CppNumericalSolvers/include/cppoptlib include/
+

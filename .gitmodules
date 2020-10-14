@@ -24,3 +24,7 @@
 [submodule "3p/src/libmdbx"]
 	path = 3p/src/libmdbx
 	url = https://github.com/erthink/libmdbx.git
+[submodule "3p/src/CppNumericalSolvers"]
+	path = 3p/src/CppNumericalSolvers
+	url = https://github.com/PatWie/CppNumericalSolvers.git
+	branch = v2
