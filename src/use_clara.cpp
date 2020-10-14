@@ -1,4 +1,4 @@
-#include <clara.hpp>  // Only has two header files
+#include "clara/clara.hpp"  // Only has two header files
 #include <iostream>
 
 struct Params {
