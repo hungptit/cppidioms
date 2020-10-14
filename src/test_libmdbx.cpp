@@ -36,7 +36,7 @@ int main() {
     fprintf(stderr, "mdbx_dbi_open: (%d) %s\n", rc, mdbx_strerror(rc));
     exit(1);
   }
-  
+
   key.iov_len = sizeof(kdata);
   key.iov_base = kdata;
 

@@ -1,5 +1,6 @@
-#include "clara/clara.hpp"  // Only has two header files
 #include <iostream>
+
+#include "clara/clara.hpp"  // Only has two header files
 
 struct Params {
   int age = -1;

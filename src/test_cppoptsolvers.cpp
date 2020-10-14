@@ -1,7 +1,9 @@
 // Copyright 2020, https://github.com/PatWie/CppNumericalSolvers
 
+#include <cstdlib>
 #include <iostream>
 #include <ostream>
+#include <vector>
 
 #include "cppoptlib/function.h"
 #include "cppoptlib/solver/bfgs.h"
@@ -13,6 +15,7 @@
 
 using FunctionXd = cppoptlib::function::Function<double>;
 
+// https://en.wikipedia.org/wiki/Rosenbrock_function
 class Rosenbrock : public FunctionXd {
  public:
   using FunctionXd::hessian_t;
@@ -25,17 +28,11 @@ class Rosenbrock : public FunctionXd {
   }
 };
 
-int main() {
-  // using Solver = cppoptlib::solver::NewtonDescent<Function>;
-  // using Solver = cppoptlib::solver::GradientDescent<Function>;
-  // using Solver = cppoptlib::solver::ConjugatedGradientDescent<Function>;
-  // using Solver = cppoptlib::solver::Bfgs<Function>;
-  // using Solver = cppoptlib::solver::Lbfgs<Rosenbrock>;
-  using Solver = cppoptlib::solver::Lbfgsb<Rosenbrock>;
-
+template <typename Solver>
+void solve(const std::vector<double>& values) {
   Rosenbrock f;
   Rosenbrock::vector_t x(2);
-  x << -100, 2;
+  x << values[0], values[1];
 
   auto state = f.Eval(x);
   std::cout << "this"
@@ -58,6 +55,57 @@ int main() {
 
   std::cout << "Solution: " << solution.x.transpose() << "\n";
   std::cout << "f(x): " << f(solution.x) << "\n";
+}
 
+int main(int argc, char* argv[]) {
+  if (argc < 2) return EXIT_FAILURE;
+  int solver_id = std::atoi(argv[1]);
+  const std::vector<double> x{-100, 4};
+
+  switch (solver_id) {
+    case 0: {
+      std::cout << "NewtonDescent\n";
+      using Solver = cppoptlib::solver::NewtonDescent<Rosenbrock>;
+      solve<Solver>(x);
+      break;
+    }
+    case 1: {
+      std::cout << "GradientDescent\n";
+      using Solver = cppoptlib::solver::GradientDescent<Rosenbrock>;
+      solve<Solver>(x);
+      break;
+    }
+
+    case 2: {
+      std::cout << "ConjugatedGradientDescent\n";
+      using Solver = cppoptlib::solver::ConjugatedGradientDescent<Rosenbrock>;
+      solve<Solver>(x);
+      break;
+    }
+
+    case 3: {
+      std::cout << "Bfgs\n";
+      using Solver = cppoptlib::solver::Bfgs<Rosenbrock>;
+      solve<Solver>(x);
+      break;
+    }
+
+    case 4: {
+      std::cout << "Lbfgs\n";
+      using Solver = cppoptlib::solver::Lbfgs<Rosenbrock>;
+      solve<Solver>(x);
+      break;
+    }
+
+    case 5: {
+      std::cout << "Lbfgsb\n";
+      using Solver = cppoptlib::solver::Lbfgsb<Rosenbrock>;
+      solve<Solver>(x);
+      break;
+    }
+    default:
+      std::cerr << "Invalid solver id\n";
+      break;
+  }
   return 0;
 }
