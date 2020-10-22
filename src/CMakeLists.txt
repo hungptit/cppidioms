@@ -44,6 +44,8 @@ add_cxx_compiler_flag(-Wall)
 add_cxx_compiler_flag(-pedantic)
 add_cxx_compiler_flag(-pedantic-errors)
 add_cxx_compiler_flag(-fstrict-aliasing)
+add_compile_options(-fprofile-instr-generate)
+add_compile_options(-fcoverage-mapping)
 
 if(HAVE_CXX_FLAG_FSTRICT_ALIASING)
   add_cxx_compiler_flag(-Wstrict-aliasing)
@@ -86,7 +88,7 @@ set(CPP_FILES
     eigen_ops
     enable_if
     enum_values
-    # epsilon
+    epsilon
     function_arg_lifetime
     generate
     get_line
@@ -105,6 +107,7 @@ set(CPP_FILES
     terminate_flush
     test_ifstream
     unique_ptr_vector
+    unique_ptr
     use_clara)
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)

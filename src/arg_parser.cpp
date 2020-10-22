@@ -52,6 +52,34 @@ struct ModelParameters {
   std::optional<ContingencyTable> table = {};
 };
 
+struct PredictionParameters {
+  ModelParameters model_params;
+  std::vector<PredictorParameters> pred_params;
+};
+
+class ArgumentParser {
+ private:
+    static constexpr char SINGLE_QUOTE = '\'';
+    static constexpr char COMMA = ',';
+
+    
+  // 'model=rl,augmentation=off,lambda=0.5,contingency_table=[[1,2,3,4,5,6],[1,2,3,4,5,6]]'
+  ModelParameters parse_model_parameters() {}
+
+  // Will look like this: 'type=ordered,augmentation=off'
+  PredictorParameters parse_predictor_parameters() {}
+
+    
+    
+ public:
+
+    template<typename Iter>
+    PredictionParameters parse(Iter begin, Iter end) {
+        
+    }
+    
+};
+
 int main() {
   PredictorParameters pred_param = {};
   std::cout << "pred_param: " << pred_param << "\n";
