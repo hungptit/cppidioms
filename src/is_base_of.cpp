@@ -1,3 +1,4 @@
+
 #include <cstdlib>
 #include <iostream>
 #include <type_traits>
@@ -28,7 +29,7 @@ void exec_v2(const T& value) {
 
 int main() {
   A a;
-  B b;
+  // B b;
   C c;
 
   exec_v1<A>(a);

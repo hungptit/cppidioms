@@ -106,6 +106,7 @@ set(CPP_FILES
     std_vector_back
     terminate_flush
     test_ifstream
+    test_cppoptsolvers
     unique_ptr_vector
     unique_ptr
     use_clara)
@@ -114,6 +115,11 @@ foreach(src_file ${CPP_FILES})
   target_link_libraries(${src_file})
   add_test(${src_file} ./${src_file})
 endforeach(src_file)
+
+# test_libmdbx
+add_executable(test_libmdbx test_libmdbx.cpp)
+target_link_libraries(test_libmdbx "${EXTERNAL_DIR}/lib/libmdbx-static.a")
+add_test(test_libmdbx ./test_libmdbx)
 
 # Formating and linting all related files
 file(GLOB_RECURSE SRCS_AND_HDRS *.cpp *.hpp)
