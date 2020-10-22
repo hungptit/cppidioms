@@ -28,3 +28,7 @@
 	path = 3p/src/CppNumericalSolvers
 	url = https://github.com/PatWie/CppNumericalSolvers.git
 	branch = v2
+[submodule "3p/src/cmake-scripts"]
+	path = 3p/src/cmake-scripts
+	url = https://github.com/StableCoder/cmake-scripts.git
+	branch = master

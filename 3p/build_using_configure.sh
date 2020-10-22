@@ -19,6 +19,8 @@ echo "====> Prefix folder: " "$APKG_PREFIX"
 
 # Build a given package
 echo "====> Build folder: " "$APKG_BUILD_FOLDER"
+
+# shellcheck disable=SC2115
 rm -rf "$APKG_BUILD_FOLDER"
 mkdir "$APKG_BUILD_FOLDER"
 pushd "$APKG_BUILD_FOLDER"
@@ -26,4 +28,6 @@ pushd "$APKG_BUILD_FOLDER"
 make "$BUILD_OPTS" "$EXTRA_MAKE_OPTIONS"
 make install
 popd
+
+# shellcheck disable=SC2115
 rm -rf "$APKG_BUILD_FOLDER" # Cleanup build directory.

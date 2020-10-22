@@ -14,6 +14,8 @@ set(EXTERNAL_DIR "${ROOT_DIR}/3p")
 set(SRC_DIR "${ROOT_DIR}/src")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH
+     "${CMAKE_CURRENT_SOURCE_DIR}/../3p/src/cmake-scripts")
 
 # Read the git tags to determine the project version
 include(GetGitVersion)
@@ -30,6 +32,13 @@ string(SUBSTRING ${VERSION} 0 1 GENERIC_LIB_SOVERSION)
 include(CheckCXXCompilerFlag)
 include(AddCXXCompilerFlag)
 include(CXXFeatureCheck)
+
+# Code coverage setup. Use -DCODE_COVERAGE=ON to enable code coverage.
+include(code-coverage)
+
+# Use C++17
+include(c++-standards)
+cxx_17()
 
 # set(CMAKE_CXX_COMPILER clang++) SET(CMAKE_CXX_COMPILER g++-9)
 # add_cxx_compiler_flag(-stdlib=libc++)
@@ -76,6 +85,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Include folders
 include_directories("${EXTERNAL_DIR}/include")
 include_directories("${EXTERNAL_DIR}/include/eigen3")
+include_directories("${EXTERNAL_DIR}/src/CppNumericalSolvers/include")
 include_directories("${SRC_DIR}")
 
 # Unittests
@@ -113,13 +123,14 @@ set(CPP_FILES
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
   target_link_libraries(${src_file})
+  target_code_coverage(${src_file} all)
   add_test(${src_file} ./${src_file})
 endforeach(src_file)
 
 # test_libmdbx
-add_executable(test_libmdbx test_libmdbx.cpp)
-target_link_libraries(test_libmdbx "${EXTERNAL_DIR}/lib/libmdbx-static.a")
-add_test(test_libmdbx ./test_libmdbx)
+# add_executable(test_libmdbx test_libmdbx.cpp)
+# target_link_libraries(test_libmdbx "${EXTERNAL_DIR}/lib/libmdbx-static.a")
+# add_test(test_libmdbx ./test_libmdbx)
 
 # Formating and linting all related files
 file(GLOB_RECURSE SRCS_AND_HDRS *.cpp *.hpp)
