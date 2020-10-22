@@ -123,12 +123,11 @@ set(CPP_FILES
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
   target_link_libraries(${src_file})
-  target_code_coverage(${src_file} all)
+  target_code_coverage(${src_file} all auto external)
   add_test(${src_file} ./${src_file})
 endforeach(src_file)
 
-# test_libmdbx
-# add_executable(test_libmdbx test_libmdbx.cpp)
+# test_libmdbx add_executable(test_libmdbx test_libmdbx.cpp)
 # target_link_libraries(test_libmdbx "${EXTERNAL_DIR}/lib/libmdbx-static.a")
 # add_test(test_libmdbx ./test_libmdbx)
 
