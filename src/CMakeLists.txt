@@ -77,7 +77,7 @@ add_cxx_compiler_flag(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
 add_cxx_compiler_flag(-flto)
 add_cxx_compiler_flag(-static)
 
-# Build with ASAN by default add_cxx_compiler_flag(-fsanitize=address)
+add_cxx_compiler_flag(-fsanitize=address)
 
 enable_testing()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -93,6 +93,7 @@ set(CPP_FILES
     accumulate
     arg_parser
     avoid_boost_optional
+    code_warrior
     custom_deleter
     eigen_matrix
     eigen_ops
@@ -114,6 +115,7 @@ set(CPP_FILES
     singleton
     stats
     std_vector_back
+    stream_operator
     terminate_flush
     test_ifstream
     test_cppoptsolvers
