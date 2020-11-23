@@ -14,19 +14,11 @@ ostream& operator<<(ostream& os, const std::pair<std::string, T>& item) {
 
 template <typename Value>
 ostream& operator<<(ostream& os, const std::map<std::string, Value>& data) {
-  const size_t len = data.size();
-  if (len == 0U) {
-    os << "{}";
-    return os;
-  }
-
   os << "{";
-  auto it = data.cbegin();
-  os << "{" << std::quoted(it->first) << "," << it->second << "}";
-  ++it;
-
-  for (; it != data.cend(); ++it) {
-    os << ",{" << std::quoted(it->first) << "," << it->second << "}";
+  int count = 0;
+  for (auto it = data.cbegin(); it != data.cend(); ++it) {
+    os << (count++ != 0 ? ",{" : "{") << std::quoted(it->first) << ","
+       << it->second << "}";
   }
   os << "}";
   return os;
@@ -35,20 +27,11 @@ ostream& operator<<(ostream& os, const std::map<std::string, Value>& data) {
 template <>
 ostream& operator<<(ostream& os,
                     const std::map<std::string, std::string>& data) {
-  const size_t len = data.size();
-  if (len == 0U) {
-    os << "{}";
-    return os;
-  }
-
   os << "{";
-  auto it = data.cbegin();
-  os << "{" << std::quoted(it->first) << "," << std::quoted(it->second) << "}";
-  ++it;
-
-  for (; it != data.cend(); ++it) {
-    os << ",{" << std::quoted(it->first) << "," << std::quoted(it->second)
-       << "}";
+  int count = 0;
+  for (auto it = data.cbegin(); it != data.cend(); ++it) {
+    os << (count++ != 0 ? ",{" : "{") << std::quoted(it->first) << ","
+       << std::quoted(it->second) << "}";
   }
   os << "}";
   return os;
@@ -65,6 +48,12 @@ int main() {
 
   std::map<std::string, std::string> smap{{"a", "1"}, {"b", "2"}};
   std::cout << smap << "\n";
+
+  std::map<std::string, std::string> smap_empty{};
+  std::cout << smap_empty << "\n";
+
+  std::map<std::string, std::string> smap_one{{"a", "1"}};
+  std::cout << smap_one << "\n";
 
   return EXIT_SUCCESS;
 }
