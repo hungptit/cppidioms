@@ -64,7 +64,7 @@ add_cxx_compiler_flag(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
 
 # Build using static libraries to reduce dependency.
 add_cxx_compiler_flag(-flto)
-add_cxx_compiler_flag(-static)
+# add_cxx_compiler_flag(-static)
 
 enable_testing()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
