@@ -83,10 +83,6 @@ add_subdirectory(src)
 
 # Formating and linting all related files
 file(GLOB_RECURSE SRCS_AND_HDRS src/*.cpp src/*.h)
-
-message(${SRCS_AND_HDRS})
-
-# list(FILTER SRCS_AND_HDRS EXCLUDE REGEX "3p/")
 find_program(CLANG_FORMAT NAMES clang-format)
 add_custom_command(
   OUTPUT .fmt_cpp_stamp

@@ -1,4 +1,5 @@
 #include <array>
+#include <exception>
 #include <iostream>
 
 int main() {

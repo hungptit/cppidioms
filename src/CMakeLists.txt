@@ -34,8 +34,10 @@ set(CPP_FILES
     terminate_flush
     test_ifstream
     test_cppoptsolvers
+    test_constexpr
     unique_ptr_vector
     unique_ptr
+    polynomials
     use_clara)
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
