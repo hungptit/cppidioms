@@ -14,9 +14,7 @@ bool ex3(const double x) {
   return x >= eps;
 }
 
-bool ex4(const double x) {
-  return x > 0;
-}
+bool ex4(const double x) { return x > 0; }
 
 int main() {
   const double deps = std::numeric_limits<double>::epsilon();
