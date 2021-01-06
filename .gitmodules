@@ -1,34 +1,7 @@
-[submodule "3p/src/doctest"]
-	path = 3p/src/doctest
-	url = https://github.com/onqtam/doctest.git
-	branch = master
-[submodule "3p/src/Clara"]
-	path = 3p/src/Clara
-	url = https://github.com/catchorg/Clara
-	branch = master
 [submodule "3p/src/fmt"]
 	path = 3p/src/fmt
 	url = https://github.com/fmtlib/fmt
 	branch = master
-[submodule "3p/src/Lyra"]
-	path = 3p/src/Lyra
-	url = https://github.com/bfgroup/Lyra.git
-	branch = master
-[submodule "3p/src/benchmark"]
-	path = 3p/src/benchmark
-	url = https://github.com/google/benchmark.git
-	branch = master
-[submodule "3p/src/eigen"]
-	path = 3p/src/eigen
-	url = https://gitlab.com/libeigen/eigen.git
 [submodule "3p/src/libmdbx"]
 	path = 3p/src/libmdbx
 	url = https://github.com/erthink/libmdbx.git
-[submodule "3p/src/CppNumericalSolvers"]
-	path = 3p/src/CppNumericalSolvers
-	url = https://github.com/PatWie/CppNumericalSolvers.git
-	branch = v2
-[submodule "3p/src/cmake-scripts"]
-	path = 3p/src/cmake-scripts
-	url = https://github.com/StableCoder/cmake-scripts.git
-	branch = master

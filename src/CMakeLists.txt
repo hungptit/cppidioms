@@ -1,8 +1,3 @@
-project(unittests)
-cmake_minimum_required(VERSION 3.0)
-
-enable_testing()
-
 # Unittests
 set(CPP_FILES
     accumulate
@@ -33,12 +28,12 @@ set(CPP_FILES
     stream_operator
     terminate_flush
     test_ifstream
-    test_cppoptsolvers
     test_constexpr
     unique_ptr_vector
     unique_ptr
     polynomials
-    use_clara)
+    # use_clara
+)
 foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
   target_link_libraries(${src_file})
@@ -49,3 +44,5 @@ endforeach(src_file)
 # test_libmdbx add_executable(test_libmdbx test_libmdbx.cpp)
 # target_link_libraries(test_libmdbx "${EXTERNAL_DIR}/lib/libmdbx-static.a")
 # add_test(test_libmdbx ./test_libmdbx)
+
+enable_testing()

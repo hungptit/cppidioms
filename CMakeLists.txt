@@ -1,5 +1,18 @@
-project(CppIdioms)
-cmake_minimum_required(VERSION 3.0)
+cmake_policy(SET CMP0048 NEW)
+project(
+  cppidioms
+  VERSION 0.1.0
+  LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.15)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Use C++ 17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+include(FetchContent)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -8,75 +21,77 @@ endif()
 
 set(POSITION_INDEPENDENT_CODE ON)
 
-set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-set(EXTERNAL_DIR "${ROOT_DIR}/3p")
-set(SRC_DIR "${ROOT_DIR}/src")
+# Add doctest
+FetchContent_Declare(
+  doctest
+  GIT_REPOSITORY https://github.com/onqtam/doctest.git
+  GIT_TAG 2.4.4
+  GIT_SHALLOW TRUE)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-list(APPEND CMAKE_MODULE_PATH
-     "${CMAKE_CURRENT_SOURCE_DIR}/3p/src/cmake-scripts")
+set(DOCTEST_WITH_TESTS OFF)
+FetchContent_MakeAvailable(doctest)
 
-# Read the git tags to determine the project version
-include(GetGitVersion)
-get_git_version(GIT_VERSION)
+# Add benchmark
+FetchContent_Declare(
+  benchmark
+  GIT_REPOSITORY https://github.com/google/benchmark.git
+  GIT_TAG v1.5.2
+  GIT_SHALLOW TRUE)
 
-# Tell the user what versions we are using
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" VERSION ${GIT_VERSION})
+set(BENCHMARK_ENABLE_TESTING OFF)
+set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
+set(BENCHMARK_ENABLE_ASSEMBLY_TEST OFF)
+FetchContent_MakeAvailable(benchmark)
 
-# The version of the libraries
-set(GENERIC_LIB_VERSION ${VERSION})
-string(SUBSTRING ${VERSION} 0 1 GENERIC_LIB_SOVERSION)
+# Eigen
+FetchContent_Declare(
+  eigen
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG master)
+set(BUILD_TESTING OFF)
+FetchContent_Populate(eigen)
 
-include(CheckCXXCompilerFlag)
-include(AddCXXCompilerFlag)
-include(CXXFeatureCheck)
+# Add cmake-scripts
+FetchContent_Declare(
+  cmake_scripts
+  GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts.git
+  GIT_TAG main
+  GIT_SHALLOW TRUE)
 
-# CMake utilities
+FetchContent_MakeAvailable(cmake_scripts)
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/_deps/cmake_scripts-src/;")
 include(c++-standards)
 include(code-coverage)
 include(sanitizers)
+include(tools)
+include(dependency-graph)
 
 add_code_coverage_all_targets(EXCLUDE 3p/* unittests/solver_basic_tests.cpp)
 
-# Enable other flags
-add_cxx_compiler_flag(-std=c++17)
-add_cxx_compiler_flag(-Wall)
-add_cxx_compiler_flag(-pedantic)
-add_cxx_compiler_flag(-pedantic-errors)
-add_cxx_compiler_flag(-fstrict-aliasing)
+# Enable other flags add_compiler_options(-std=c++17)
+# add_compiler_options(-Wall) add_compiler_options(-pedantic)
+# add_compiler_options(-pedantic-errors) add_compiler_options(-fstrict-aliasing)
 
-if(HAVE_CXX_FLAG_FSTRICT_ALIASING)
-  add_cxx_compiler_flag(-Wstrict-aliasing)
-endif()
+# if(HAVE_CXX_FLAG_FSTRICT_ALIASING) add_compiler_options(-Wstrict-aliasing)
+# endif()
 
-if(HAVE_WTHREAD_SAFETY)
-  add_definitions(-DHAVE_WTHREAD_SAFETY)
-  cxx_feature_check(THREAD_SAFETY_ATTRIBUTES)
-endif()
+# if(HAVE_WTHREAD_SAFETY) add_definitions(-DHAVE_WTHREAD_SAFETY)
+# cxx_feature_check(THREAD_SAFETY_ATTRIBUTES) endif()
 
-# These flags are used to optimize the binary size.
-# add_cxx_compiler_flag(-fno-exceptions)
-add_cxx_compiler_flag(--fno-rtti)
+# # add_compile_options(--fno-rtti)
 
-# Customized flags
-add_cxx_compiler_flag(-DFMT_HEADER_ONLY)
-add_cxx_compiler_flag(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
+# # Customized flags add_compiler_options(-DFMT_HEADER_ONLY)
+# add_compiler_options(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
 
-# Build using static libraries to reduce dependency.
-add_cxx_compiler_flag(-flto)
+# # Build using static libraries to reduce dependency.
+# add_compiler_options(-flto)
 
-if(NOT USE_SANITIZER)
-  add_cxx_compiler_flag(-static)
-endif()
-
-enable_testing()
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# if(NOT USE_SANITIZER) add_compiler_options(-static) endif()
 
 # Include folders
-include_directories("${EXTERNAL_DIR}/include")
-include_directories("${EXTERNAL_DIR}/include/eigen3")
-include_directories("${EXTERNAL_DIR}/src/CppNumericalSolvers/include")
-include_directories("include")
+include_directories("_deps/eigen-src/")
+include_directories("_deps/doctest-src/")
 
 # Add libraries
 find_library(LIB_FMT libfmt.a "${EXTERNAL_DIR}/lib" NO_DEFAULT_PATH)
@@ -165,3 +180,5 @@ add_custom_target(
   lint ALL
   DEPENDS .lint_shellcheck_stamp .lint_cmake_stamp
   COMMENT "Lint Bash and CMake files.")
+
+enable_testing()
