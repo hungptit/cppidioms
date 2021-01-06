@@ -89,7 +89,6 @@ include(dependency-graph)
 
 add_code_coverage_all_targets(EXCLUDE 3p/* unittests/solver_basic_tests.cpp)
 
-add_compile_options(-std=c++17)
 add_compile_options(-pedantic)
 add_compile_options(-pedantic-errors)
 add_compile_options(-static)
