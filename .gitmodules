@@ -1,7 +1,0 @@
-[submodule "3p/src/fmt"]
-	path = 3p/src/fmt
-	url = https://github.com/fmtlib/fmt
-	branch = master
-[submodule "3p/src/libmdbx"]
-	path = 3p/src/libmdbx
-	url = https://github.com/erthink/libmdbx.git

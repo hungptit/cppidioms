@@ -69,7 +69,16 @@ FetchContent_Declare(
   GIT_TAG main
   GIT_SHALLOW TRUE)
 
-FetchContent_MakeAvailable(cmake_scripts)
+FetchContent_Populate(cmake_scripts)
+
+# Add libmdbx
+FetchContent_Declare(
+  libmdbx
+  GIT_REPOSITORY https://github.com/erthink/libmdbx.git
+  GIT_TAG v0.9.2)
+
+set(MDBX_INSTALL_STATIC ON)
+# FetchContent_MakeAvailable(libmdbx)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/_deps/cmake_scripts-src/;")
 include(c++-standards)
@@ -87,9 +96,6 @@ add_compile_options(-static)
 
 # Customized flags add_compiler_options(-DFMT_HEADER_ONLY)
 add_compile_options(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
-
-# Build using static libraries to reduce dependency.
-# add_compile_options(-flto)
 
 # Include folders
 include_directories("_deps/eigen-src/")
