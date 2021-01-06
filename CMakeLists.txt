@@ -51,6 +51,17 @@ FetchContent_Declare(
 set(BUILD_TESTING OFF)
 FetchContent_Populate(eigen)
 
+# fmt
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 7.1.3)
+set(BUILD_TESTING OFF)
+
+set(FMT_DOC OFF)
+set(FMT_TEST OFF)
+FetchContent_MakeAvailable(fmt)
+
 # Add cmake-scripts
 FetchContent_Declare(
   cmake_scripts
@@ -69,32 +80,21 @@ include(dependency-graph)
 
 add_code_coverage_all_targets(EXCLUDE 3p/* unittests/solver_basic_tests.cpp)
 
-# Enable other flags add_compiler_options(-std=c++17)
-# add_compiler_options(-Wall) add_compiler_options(-pedantic)
-# add_compiler_options(-pedantic-errors) add_compiler_options(-fstrict-aliasing)
+add_compile_options(-std=c++17)
+add_compile_options(-pedantic)
+add_compile_options(-pedantic-errors)
+add_compile_options(-static)
 
-# if(HAVE_CXX_FLAG_FSTRICT_ALIASING) add_compiler_options(-Wstrict-aliasing)
-# endif()
+# Customized flags add_compiler_options(-DFMT_HEADER_ONLY)
+add_compile_options(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
 
-# if(HAVE_WTHREAD_SAFETY) add_definitions(-DHAVE_WTHREAD_SAFETY)
-# cxx_feature_check(THREAD_SAFETY_ATTRIBUTES) endif()
-
-# # add_compile_options(--fno-rtti)
-
-# # Customized flags add_compiler_options(-DFMT_HEADER_ONLY)
-# add_compiler_options(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
-
-# # Build using static libraries to reduce dependency.
-# add_compiler_options(-flto)
-
-# if(NOT USE_SANITIZER) add_compiler_options(-static) endif()
+# Build using static libraries to reduce dependency.
+# add_compile_options(-flto)
 
 # Include folders
 include_directories("_deps/eigen-src/")
 include_directories("_deps/doctest-src/")
-
-# Add libraries
-find_library(LIB_FMT libfmt.a "${EXTERNAL_DIR}/lib" NO_DEFAULT_PATH)
+include_directories("_deps/doctest-src/")
 
 # Add sub-directories
 add_subdirectory(src)
@@ -103,10 +103,10 @@ add_subdirectory(src)
 file(GLOB_RECURSE SRCS_AND_HDRS src/*.cpp src/*.h)
 find_program(CLANG_FORMAT NAMES clang-format)
 add_custom_command(
-  OUTPUT .fmt_cpp_stamp
+  OUTPUT .format_cpp_stamp
   DEPENDS ${SRCS_AND_HDRS}
   COMMAND ${CLANG_FORMAT} -i ${SRCS_AND_HDRS}
-  COMMAND touch .fmt_cpp_stamp
+  COMMAND touch .format_cpp_stamp
   COMMENT "Format C++ files with clang-format."
   VERBATIM)
 
@@ -114,52 +114,52 @@ file(GLOB CMAKE_FILES CMakeLists.txt src/CMakeLists.txt)
 find_program(CMAKE_FORMAT NAMES cmake-format)
 if(${CMAKE_FORMAT} STREQUAL "CMAKE_FORMAT-NOTFOUND")
   add_custom_command(
-    OUTPUT .fmt_cmake_stamp
+    OUTPUT .format_cmake_stamp
     DEPENDS ${CMAKE_FILES}
-    COMMAND touch .fmt_cmake_stamp
+    COMMAND touch .format_cmake_stamp
     COMMENT "Skip formatting CMake files."
     VERBATIM)
 else()
   add_custom_command(
-    OUTPUT .fmt_cmake_stamp
+    OUTPUT .format_cmake_stamp
     DEPENDS ${CMAKE_FILES}
     COMMAND cmake-format -i ${CMAKE_FILES}
-    COMMAND touch .fmt_cmake_stamp
+    COMMAND touch .format_cmake_stamp
     COMMENT "Format CMake files with cmake-format."
     VERBATIM)
 endif()
 
 file(GLOB SH_SRCS 3p/*.sh)
-find_program(SHFMT NAMES shfmt)
-if(${SHFMT} STREQUAL "SHFMT-NOTFOUND")
+find_program(SHFORMAT NAMES shformat)
+if(${SHFORMAT} STREQUAL "SHFORMAT-NOTFOUND")
   add_custom_command(
-    OUTPUT .fmt_bash_stamp
+    OUTPUT .format_bash_stamp
     DEPENDS ${SH_SRCS}
-    COMMAND touch .fmt_bash_stamp
+    COMMAND touch .format_bash_stamp
     COMMENT "Skip formatting Bash scripts."
     VERBATIM)
 else()
   if(UNIX AND NOT APPLE)
     add_custom_command(
-      OUTPUT .fmt_bash_stamp
+      OUTPUT .format_bash_stamp
       DEPENDS ${SH_SRCS}
-      COMMAND ${SHFMT} -i 2 -ci -w ${SH_SRCS}
-      COMMAND touch .fmt_bash_stamp
-      COMMENT "Format Bash scripts with shfmt."
+      COMMAND ${SHFORMAT} -i 2 -ci -w ${SH_SRCS}
+      COMMAND touch .format_bash_stamp
+      COMMENT "Format Bash scripts with shformat."
       VERBATIM)
   else()
     add_custom_command(
-      OUTPUT .fmt_bash_stamp
+      OUTPUT .format_bash_stamp
       DEPENDS ${SH_SRCS}
-      COMMAND touch .fmt_bash_stamp
+      COMMAND touch .format_bash_stamp
       COMMENT "Skip formatting Bash scripts."
       VERBATIM)
   endif()
 endif()
 
 add_custom_target(
-  fmt
-  DEPENDS .fmt_bash_stamp .fmt_cpp_stamp .fmt_cmake_stamp
+  format
+  DEPENDS .format_bash_stamp .format_cpp_stamp .format_cmake_stamp
   COMMENT "Format Bash, C++, and CMake files.")
 
 add_custom_command(
