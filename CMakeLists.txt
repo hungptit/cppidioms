@@ -164,7 +164,7 @@ endif()
 
 add_custom_target(
   format
-  DEPENDS .format_bash_stamp .format_cpp_stamp .format_cmake_stamp
+  DEPENDS .format_cpp_stamp .format_cmake_stamp
   COMMENT "Format Bash, C++, and CMake files.")
 
 add_custom_command(
@@ -183,7 +183,7 @@ add_custom_command(
 
 add_custom_target(
   lint ALL
-  DEPENDS .lint_shellcheck_stamp .lint_cmake_stamp
+  DEPENDS .lint_cmake_stamp
   COMMENT "Lint Bash and CMake files.")
 
 enable_testing()
