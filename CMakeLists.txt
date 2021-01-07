@@ -78,7 +78,7 @@ FetchContent_Declare(
   GIT_TAG v0.9.2)
 
 set(MDBX_INSTALL_STATIC ON)
-# FetchContent_MakeAvailable(libmdbx)
+FetchContent_MakeAvailable(libmdbx)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/_deps/cmake_scripts-src/;")
 include(c++-standards)

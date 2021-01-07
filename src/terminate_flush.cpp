@@ -11,7 +11,7 @@ struct MyLog {
 
 int main() {
   MyLog log("Test");
-  int val = 0;
-  std::cin >> val;
+  // int val = 0;
+  // std::cin >> val;
   return EXIT_SUCCESS;
 }
