@@ -16,6 +16,7 @@ set(CPP_FILES
     get_unused_port
     interface_class
     is_base_of
+    map_erase
     matrix
     misuse_smart_ptr
     move_semantics
