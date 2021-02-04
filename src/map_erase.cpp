@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <iostream>
 #include <set>
 #include <string>
 
@@ -7,7 +8,10 @@ namespace {
 }
 
 int main() {
-    auto &lk = lookup;
-    lk.erase("4");
+    for (auto &item : lookup) {
+        lookup.erase(item);
+    }
+
+    std::cout << lookup.size() << "\n";
     return EXIT_SUCCESS;
 }
