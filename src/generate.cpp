@@ -12,7 +12,7 @@ std::vector<int> generate1(const int M, const int N) {
 std::vector<int> generate2(const int M, const int N) {
   const int len = M * N;
   std::vector<int> results(len, 0);
-  for (int idx = 0; idx < results.size(); ++idx) {
+  for (size_t idx = 0; idx < results.size(); ++idx) {
     results[idx] = idx / N;
   }
   return results;

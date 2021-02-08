@@ -3,23 +3,39 @@ project(
   cppidioms
   VERSION 0.1.0
   LANGUAGES CXX)
+
 cmake_minimum_required(VERSION 3.15)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Use C++ 17
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-include(FetchContent)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
   set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
 endif()
 
+# Use C++ 17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(POSITION_INDEPENDENT_CODE ON)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(AddCXXCompilerFlag)
+include(CXXFeatureCheck)
+
+if(MSVC)
+  add_compile_options(/W4 /WX)
+else()
+  add_cxx_compiler_flag(-Wall)
+  add_cxx_compiler_flag(-Wextra)
+  add_cxx_compiler_flag(-pedantic)
+  add_cxx_compiler_flag(-Werror)
+  # add_cxx_compiler_flag(-static)  # add_cxx_compiler_flag(-lto)
+endif()
+
+add_cxx_compiler_flag(-DFMT_HEADER_ONLY)
+
+include(FetchContent)
 
 # Add doctest
 FetchContent_Declare(
@@ -71,14 +87,10 @@ FetchContent_Declare(
 
 FetchContent_Populate(cmake_scripts)
 
-# Add libmdbx
-FetchContent_Declare(
-  libmdbx
-  GIT_REPOSITORY https://github.com/erthink/libmdbx.git
-  GIT_TAG v0.9.2)
+# Add libmdbx FetchContent_Declare( libmdbx GIT_REPOSITORY
+# https://github.com/erthink/libmdbx.git GIT_TAG v0.9.2)
 
-set(MDBX_INSTALL_STATIC ON)
-FetchContent_MakeAvailable(libmdbx)
+# set(MDBX_INSTALL_STATIC ON) FetchContent_MakeAvailable(libmdbx)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/_deps/cmake_scripts-src/;")
 include(c++-standards)
@@ -87,25 +99,16 @@ include(sanitizers)
 include(tools)
 include(dependency-graph)
 
-add_code_coverage_all_targets(EXCLUDE 3p/* unittests/solver_basic_tests.cpp)
-
 add_compile_options(-pedantic)
 add_compile_options(-pedantic-errors)
-add_compile_options(-static)
-
-# Customized flags add_compiler_options(-DFMT_HEADER_ONLY)
-add_compile_options(-DCEREAL_RAPIDJSON_HAS_CXX11_RVALUE_REFS)
-
-# Include folders
-include_directories("_deps/eigen-src/")
-include_directories("_deps/doctest-src/")
-include_directories("_deps/doctest-src/")
 
 # Add sub-directories
 add_subdirectory(src)
+add_subdirectory(thread)
 
 # Formating and linting all related files
-file(GLOB_RECURSE SRCS_AND_HDRS src/*.cpp src/*.h)
+file(GLOB_RECURSE SRCS_AND_HDRS CONFIGURE_DEPENDS src/*.[ch]pp src/*.h
+     thread/*cpp)
 find_program(CLANG_FORMAT NAMES clang-format)
 add_custom_command(
   OUTPUT .format_cpp_stamp
@@ -115,7 +118,7 @@ add_custom_command(
   COMMENT "Format C++ files with clang-format."
   VERBATIM)
 
-file(GLOB CMAKE_FILES CMakeLists.txt src/CMakeLists.txt)
+set(CMAKE_FILES "CMakeLists.txt" "src/CMakeLists.txt" "thread/CMakeLists.txt")
 find_program(CMAKE_FORMAT NAMES cmake-format)
 if(${CMAKE_FORMAT} STREQUAL "CMAKE_FORMAT-NOTFOUND")
   add_custom_command(

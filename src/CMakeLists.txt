@@ -22,6 +22,7 @@ set(CPP_FILES
     move_semantics
     numeric_limits
     # pmr
+    print
     shared_ptr
     singleton
     stats
@@ -39,6 +40,8 @@ foreach(src_file ${CPP_FILES})
   add_executable(${src_file} ${src_file}.cpp)
   target_link_libraries(${src_file})
   target_code_coverage(${src_file} all auto external)
+  target_include_directories(${src_file} PRIVATE "${eigen_SOURCE_DIR}"
+                                                 "${doctest_SOURCE_DIR}")
   add_test(${src_file} ./${src_file})
 endforeach(src_file)
 

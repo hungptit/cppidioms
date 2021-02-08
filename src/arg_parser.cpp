@@ -70,7 +70,9 @@ class ArgumentParser {
 
  public:
   template <typename Iter>
-  PredictionParameters parse(Iter begin, Iter end) {}
+  PredictionParameters parse(Iter, Iter) {
+    return {};
+  }
 };
 
 int main() {
