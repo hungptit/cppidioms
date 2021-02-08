@@ -1,11 +1,11 @@
 find_package(Threads)
 
 # Examples
-set(EXECUTABLESS hello_world)
-foreach(EXECUTABLE ${EXECUTABLESS})
-  add_executable(${EXECUTABLE} ${EXECUTABLE}.cpp)
-  target_link_libraries(${EXECUTABLE} PRIVATE Threads::Threads)
-  add_test(${EXECUTABLE} ./${EXECUTABLE})
-endforeach(EXECUTABLE)
+set(EXECUTABLES hello_world)
+foreach(executable ${EXECUTABLES})
+  add_executable(${executable} ${executable}.cpp)
+  target_link_libraries(${executable} PRIVATE Threads::Threads)
+  add_test(${executable} ./${executable})
+endforeach()
 
 enable_testing()
