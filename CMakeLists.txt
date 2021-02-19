@@ -147,22 +147,13 @@ if(${SHFORMAT} STREQUAL "SHFORMAT-NOTFOUND")
     COMMENT "Skip formatting Bash scripts."
     VERBATIM)
 else()
-  if(UNIX AND NOT APPLE)
-    add_custom_command(
-      OUTPUT .format_bash_stamp
-      DEPENDS ${SH_SRCS}
-      COMMAND ${SHFORMAT} -i 2 -ci -w ${SH_SRCS}
-      COMMAND touch .format_bash_stamp
-      COMMENT "Format Bash scripts with shformat."
-      VERBATIM)
-  else()
-    add_custom_command(
-      OUTPUT .format_bash_stamp
-      DEPENDS ${SH_SRCS}
-      COMMAND touch .format_bash_stamp
-      COMMENT "Skip formatting Bash scripts."
-      VERBATIM)
-  endif()
+  add_custom_command(
+    OUTPUT .format_bash_stamp
+    DEPENDS ${SH_SRCS}
+    COMMAND ${SHFORMAT} -i 2 -ci -w ${SH_SRCS}
+    COMMAND touch .format_bash_stamp
+    COMMENT "Format Bash scripts with shformat."
+    VERBATIM)
 endif()
 
 add_custom_target(
@@ -170,23 +161,14 @@ add_custom_target(
   DEPENDS .format_cpp_stamp .format_cmake_stamp
   COMMENT "Format Bash, C++, and CMake files.")
 
-add_custom_command(
-  OUTPUT .lint_shellcheck_stamp
-  DEPENDS ${SH_SRCS}
-  COMMAND shellcheck ${SH_SRCS}
-  COMMAND touch .lint_shellcheck_stamp
-  COMMENT "Lint Bash files with shellcheck.")
+# find_program(CMAKE_LINT NAMES cmake-lint) if(${CMAKE_LINT} STREQUAL
+# "CMAKE_LINT-NOTFOUND") add_custom_command( OUTPUT .lint_cmake_stamp DEPENDS
+# ${CMAKE_FILES} COMMAND touch .lint_cmake_stamp COMMENT "Skip linting CMake
+# files." VERBATIM) elseif() add_custom_command( OUTPUT .lint_cmake_stamp
+# DEPENDS ${CMAKE_FILES} COMMAND ${CMAKE_LINT} ${CMAKE_FILES} COMMAND touch
+# .lint_cmake_stamp COMMENT "Lint CMake files with cmake-lint.") endif()
 
-add_custom_command(
-  OUTPUT .lint_cmake_stamp
-  DEPENDS ${CMAKE_FILES}
-  COMMAND cmake-lint ${CMAKE_FILES}
-  COMMAND touch .lint_cmake_stamp
-  COMMENT "Lint CMake files with cmake-lint.")
-
-add_custom_target(
-  lint ALL
-  DEPENDS .lint_cmake_stamp
-  COMMENT "Lint Bash and CMake files.")
+# add_custom_target( lint ALL DEPENDS .lint_cmake_stamp COMMENT "Lint CMake
+# files.")
 
 enable_testing()

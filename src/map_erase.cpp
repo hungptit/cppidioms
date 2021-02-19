@@ -4,14 +4,14 @@
 #include <string>
 
 namespace {
-    std::set<std::string> lookup = {"1", "2", "3"};
+std::set<std::string> lookup = {"1", "2", "3"};
 }
 
 int main() {
-    for (auto &item : lookup) {
-        lookup.erase(item);
-    }
+  for (auto& item : lookup) {
+    lookup.erase(item);
+  }
 
-    std::cout << lookup.size() << "\n";
-    return EXIT_SUCCESS;
+  std::cout << lookup.size() << "\n";
+  return EXIT_SUCCESS;
 }
