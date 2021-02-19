@@ -1,7 +1,7 @@
 # Unittests
 set(CPP_FILES
     accumulate
-    arg_parser
+    # arg_parser
     avoid_boost_optional
     code_warrior
     custom_deleter
@@ -28,6 +28,7 @@ set(CPP_FILES
     stats
     std_vector_back
     stream_operator
+    struct_constructor
     terminate_flush
     test_ifstream
     test_constexpr
