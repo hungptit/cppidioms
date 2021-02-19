@@ -12,7 +12,7 @@ if(CCACHE_PROGRAM)
 endif()
 
 # Use C++ 17
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -160,15 +160,5 @@ add_custom_target(
   format
   DEPENDS .format_cpp_stamp .format_cmake_stamp
   COMMENT "Format Bash, C++, and CMake files.")
-
-# find_program(CMAKE_LINT NAMES cmake-lint) if(${CMAKE_LINT} STREQUAL
-# "CMAKE_LINT-NOTFOUND") add_custom_command( OUTPUT .lint_cmake_stamp DEPENDS
-# ${CMAKE_FILES} COMMAND touch .lint_cmake_stamp COMMENT "Skip linting CMake
-# files." VERBATIM) elseif() add_custom_command( OUTPUT .lint_cmake_stamp
-# DEPENDS ${CMAKE_FILES} COMMAND ${CMAKE_LINT} ${CMAKE_FILES} COMMAND touch
-# .lint_cmake_stamp COMMENT "Lint CMake files with cmake-lint.") endif()
-
-# add_custom_target( lint ALL DEPENDS .lint_cmake_stamp COMMENT "Lint CMake
-# files.")
 
 enable_testing()
