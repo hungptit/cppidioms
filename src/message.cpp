@@ -5,10 +5,10 @@
 
 namespace experiments {
 
-message<MessageType::HELLO>::message(const std::string& str) noexcept
+message<MessageType::REQUEST>::message(const std::string& str) noexcept
     : msg(str) {}
 
-void message<MessageType::HELLO>::operator()() { std::cout << msg; }
+void message<MessageType::REQUEST>::operator()() { std::cout << msg; }
 
-void message<MessageType::GOODBYE>::operator()() { std::cout << msg; }
+void message<MessageType::RESPONSE>::operator()() { std::cout << body; }
 }  // namespace experiments
