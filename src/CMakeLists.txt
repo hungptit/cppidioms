@@ -1,5 +1,5 @@
 # Unittests
-set(CPP_FILES
+set(EXECUTABLES
     accumulate
     # arg_parser
     avoid_boost_optional
@@ -38,14 +38,20 @@ set(CPP_FILES
     polynomials
     # use_clara
 )
-foreach(src_file ${CPP_FILES})
-  add_executable(${src_file} ${src_file}.cpp)
-  target_link_libraries(${src_file})
-  target_code_coverage(${src_file} all auto external)
-  target_include_directories(${src_file} PRIVATE "${eigen_SOURCE_DIR}"
-                                                 "${doctest_SOURCE_DIR}")
-  add_test(${src_file} ./${src_file})
-endforeach(src_file)
+foreach(executable ${EXECUTABLES})
+  add_executable(${executable} ${executable}.cpp)
+  target_link_libraries(${executable})
+  target_code_coverage(${executable} all auto external)
+  target_include_directories(${executable} PRIVATE "${eigen_SOURCE_DIR}"
+                                                   "${doctest_SOURCE_DIR}")
+  add_test(${executable} ./${executable})
+endforeach(executable)
+
+# Hiding the template implementation in the source code.
+add_library(message STATIC message.cpp)
+add_executable(test_message test_message.cpp)
+target_link_libraries(test_message message)
+target_code_coverage(test_message all auto external)
 
 # test_libmdbx add_executable(test_libmdbx test_libmdbx.cpp)
 # target_link_libraries(test_libmdbx "${EXTERNAL_DIR}/lib/libmdbx-static.a")
