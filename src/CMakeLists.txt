@@ -3,6 +3,7 @@ set(CPP_FILES
     accumulate
     # arg_parser
     avoid_boost_optional
+    call_once
     code_warrior
     custom_deleter
     eigen_matrix
