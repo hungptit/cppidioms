@@ -17,12 +17,12 @@ struct Logger;
 template <>
 struct Logger<OutputType::STDOUT> {
   static void log(const std::string& msg);
-} __attribute__((aligned(16)));
+};
 
 template <>
 struct Logger<OutputType::STDERR> {
   static void log(const std::string& msg);
-} __attribute__((aligned(16)));
+};
 
 }  // namespace detail
 
