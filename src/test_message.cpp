@@ -3,7 +3,7 @@
 #include "message.hpp"
 
 int main() {
-  experiments::Request("Request\n")();
-  experiments::Response()();
+  experiments::RequestStdout("Request\n")();
+  experiments::ResponseStderr()();
   return EXIT_SUCCESS;
 }

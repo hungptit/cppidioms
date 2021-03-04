@@ -1,3 +1,15 @@
+if(MSVC)
+  add_compile_options(/W4 /WX)
+else()
+  add_cxx_compiler_flag(-Wall)
+  add_cxx_compiler_flag(-Wextra)
+  add_cxx_compiler_flag(-pedantic)
+  add_cxx_compiler_flag(-Werror)
+  # add_cxx_compiler_flag(-static)  # add_cxx_compiler_flag(-lto)
+endif()
+
+add_cxx_compiler_flag(-DFMT_HEADER_ONLY)
+
 # Unittests
 set(EXECUTABLES
     accumulate

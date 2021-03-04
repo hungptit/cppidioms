@@ -5,10 +5,14 @@
 
 namespace experiments {
 
-message<MessageType::REQUEST>::message(const std::string& str) noexcept
-    : msg(str) {}
+void detail::Console<detail::OutputType::STDOUT>::write(
+    const std::string& msg) {
+  std::cout << msg;
+};
+    
+void detail::Console<detail::OutputType::STDERR>::write(
+    const std::string& msg) {
+  std::cerr << msg;
+}
 
-void message<MessageType::REQUEST>::operator()() { std::cout << msg; }
-
-void message<MessageType::RESPONSE>::operator()() { std::cout << body; }
 }  // namespace experiments
