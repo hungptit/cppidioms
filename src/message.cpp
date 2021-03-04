@@ -5,13 +5,11 @@
 
 namespace experiments {
 
-void detail::Console<detail::OutputType::STDOUT>::write(
-    const std::string& msg) {
+void detail::Logger<detail::OutputType::STDOUT>::log(const std::string& msg) {
   std::cout << msg;
 };
-    
-void detail::Console<detail::OutputType::STDERR>::write(
-    const std::string& msg) {
+
+void detail::Logger<detail::OutputType::STDERR>::log(const std::string& msg) {
   std::cerr << msg;
 }
 

@@ -10,48 +10,52 @@ namespace detail {
 enum class OutputType { STDOUT, STDERR };
 
 template <OutputType>
-struct Console;
+struct Logger;
 
 // We can hide the implementation in the library because everything is known
 // at the compile time.
 template <>
-struct Console<OutputType::STDOUT> {
-  static void write(const std::string& msg);
-};
+struct Logger<OutputType::STDOUT> {
+  static void log(const std::string& msg);
+} __attribute__((aligned(16)));
 
 template <>
-struct Console<OutputType::STDERR> {
-  static void write(const std::string& msg);
-};
+struct Logger<OutputType::STDERR> {
+  static void log(const std::string& msg);
+} __attribute__((aligned(16)));
 
 }  // namespace detail
 
-using StdoutConsole = detail::Console<detail::OutputType::STDOUT>;
-using StderrConsole = detail::Console<detail::OutputType::STDERR>;
+using StdoutConsole = detail::Logger<detail::OutputType::STDOUT>;
+using StderrConsole = detail::Logger<detail::OutputType::STDERR>;
 
-enum class MessageType { INVALID, REQUEST, RESPONSE };
+enum class PredictorType { INVALID, MEASURE, DIMENSION };
 
-template <MessageType, typename Output = StdoutConsole>
-struct message;
+template <PredictorType, typename Logger = StdoutConsole>
+class Predictor;
 
-template <typename Output>
-struct message<MessageType::REQUEST, Output> {
-  message(const std::string& str) { msg = str; }
-  void operator()() { Output::write(msg); }
+template <typename Logger>
+class Predictor<PredictorType::MEASURE, Logger> {
+ public:
+  explicit Predictor(std::string&& str) : msg(std::move(str)) {}
+  void operator()() { Logger::log(msg); }
+
+ private:
   std::string msg;
-  Output out;
 };
 
-template <typename Output>
-struct message<MessageType::RESPONSE, Output> {
-  void operator()() { Output::write(body); }
-  const std::string body = "Response\n";
-  Output out;
+template <typename Logger>
+class Predictor<PredictorType::DIMENSION, Logger> {
+ public:
+  void operator()() { Logger::log(body); }
+
+ private:
+  const std::string body = "Do something with dimension\n";
 };
 
-using RequestStdout = message<MessageType::REQUEST, StdoutConsole>;
-using ResponseStdout = message<MessageType::RESPONSE, StdoutConsole>;
-using RequestStderr = message<MessageType::REQUEST, StderrConsole>;
-using ResponseStderr = message<MessageType::RESPONSE, StderrConsole>;
+using MeasureStdout = Predictor<PredictorType::MEASURE, StdoutConsole>;
+using DimensionStdout = Predictor<PredictorType::DIMENSION, StdoutConsole>;
+using MeasureStderr = Predictor<PredictorType::MEASURE, StderrConsole>;
+using DimensionStderr = Predictor<PredictorType::DIMENSION, StderrConsole>;
 
 }  // namespace experiments
