@@ -16,7 +16,7 @@ endif()
 # Use C++ 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(POSITION_INDEPENDENT_CODE ON)
 
@@ -64,6 +64,13 @@ FetchContent_Declare(
   GIT_TAG master)
 set(BUILD_TESTING OFF)
 FetchContent_Populate(eigen)
+
+# yas
+FetchContent_Declare(
+  yas
+  GIT_REPOSITORY https://github.com/niXman/yas.git
+  GIT_TAG master)
+FetchContent_MakeAvailable(yas)
 
 # fmt
 FetchContent_Declare(

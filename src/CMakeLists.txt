@@ -4,8 +4,7 @@ else()
   add_cxx_compiler_flag(-Wall)
   add_cxx_compiler_flag(-Wextra)
   add_cxx_compiler_flag(-pedantic)
-  # add_cxx_compiler_flag(-Werror)
-  add_cxx_compiler_flag(-Wnognu-zero-variadic-macro-arguments)
+  add_cxx_compiler_flag(-Werror)
 
   # add_cxx_compiler_flag(-static)  # add_cxx_compiler_flag(-lto)
 endif()
@@ -50,14 +49,16 @@ set(EXECUTABLES
     unique_ptr_vector
     unique_ptr
     polynomials
+    yas_example
     # use_clara
 )
 foreach(executable ${EXECUTABLES})
   add_executable(${executable} ${executable}.cpp)
   target_link_libraries(${executable})
   target_code_coverage(${executable} all auto external)
-  target_include_directories(${executable} PRIVATE "${eigen_SOURCE_DIR}"
-                                                   "${doctest_SOURCE_DIR}")
+  target_include_directories(
+    ${executable} PRIVATE "${eigen_SOURCE_DIR}" "${doctest_SOURCE_DIR}"
+                          "${yas_SOURCE_DIR}/include")
   add_test(${executable} ./${executable})
 endforeach(executable)
 
