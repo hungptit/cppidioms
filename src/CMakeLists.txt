@@ -1,4 +1,3 @@
-
 if(MSVC)
   add_compile_options(/W4 /WX)
 else()
@@ -7,7 +6,7 @@ else()
   add_cxx_compiler_flag(-pedantic)
   # add_cxx_compiler_flag(-Werror)
   add_cxx_compiler_flag(-Wnognu-zero-variadic-macro-arguments)
-  
+
   # add_cxx_compiler_flag(-static)  # add_cxx_compiler_flag(-lto)
 endif()
 
@@ -63,16 +62,17 @@ foreach(executable ${EXECUTABLES})
 endforeach(executable)
 
 # Hiding the template implementation in the source code.
-add_library(message STATIC message.cpp)
-target_include_directories(message PRIVATE ${spdlog_SOURCE_DIR}/include/)
-target_link_libraries(message PRIVATE spdlog::spdlog)
+add_library(mylib STATIC predictors.cpp)
+target_include_directories(mylib PRIVATE ${spdlog_SOURCE_DIR}/include/
+                                         ${binlog_SOURCE_DIR}/include/)
+target_link_libraries(mylib PRIVATE spdlog::spdlog binlog::binlog)
 
-add_executable(test_message test_message.cpp)
-target_link_libraries(test_message message)
-target_code_coverage(test_message all auto external)
-
-message(${quill_SOURCE_DIR}/quill/include/)
-message(${spdlog_SOURCE_DIR})
+add_executable(test_predictors test_predictors.cpp)
+target_link_libraries(test_predictors mylib)
+target_include_directories(
+  test_predictors PRIVATE ${spdlog_SOURCE_DIR}/include/
+                          ${binlog_SOURCE_DIR}/include/)
+target_code_coverage(test_predictors all auto external)
 
 # test_libmdbx add_executable(test_libmdbx test_libmdbx.cpp)
 # target_link_libraries(test_libmdbx "${EXTERNAL_DIR}/lib/libmdbx-static.a")

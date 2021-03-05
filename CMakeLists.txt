@@ -41,6 +41,12 @@ FetchContent_Declare(
   GIT_TAG v1.8.2)
 FetchContent_MakeAvailable(spdlog)
 
+FetchContent_Declare(
+  binlog
+  GIT_REPOSITORY https://github.com/morganstanley/binlog.git
+  GIT_TAG 2020-04-26)
+FetchContent_MakeAvailable(binlog)
+
 # Add benchmark
 FetchContent_Declare(
   benchmark
