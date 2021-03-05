@@ -7,7 +7,7 @@ namespace experiments {
 
 namespace detail {
 
-enum class OutputType { STDOUT, STDERR };
+enum class OutputType { STDOUT, SPDLOG };
 
 template <OutputType>
 struct Logger;
@@ -20,14 +20,14 @@ struct Logger<OutputType::STDOUT> {
 };
 
 template <>
-struct Logger<OutputType::STDERR> {
+struct Logger<OutputType::SPDLOG> {
   static void log(const std::string& msg);
 };
 
 }  // namespace detail
 
 using StdoutConsole = detail::Logger<detail::OutputType::STDOUT>;
-using StderrConsole = detail::Logger<detail::OutputType::STDERR>;
+using SpdlogConsole = detail::Logger<detail::OutputType::SPDLOG>;
 
 enum class PredictorType { INVALID, MEASURE, DIMENSION };
 
@@ -50,12 +50,10 @@ class Predictor<PredictorType::DIMENSION, Logger> {
   void operator()() { Logger::log(body); }
 
  private:
-  const std::string body = "Do something with dimension\n";
+  const std::string body = "Log all dimension information using std::cout";
 };
 
-using MeasureStdout = Predictor<PredictorType::MEASURE, StdoutConsole>;
-using DimensionStdout = Predictor<PredictorType::DIMENSION, StdoutConsole>;
-using MeasureStderr = Predictor<PredictorType::MEASURE, StderrConsole>;
-using DimensionStderr = Predictor<PredictorType::DIMENSION, StderrConsole>;
+using DimensionWithStdout = Predictor<PredictorType::DIMENSION, StdoutConsole>;
+using MeasureWithSpdlog = Predictor<PredictorType::MEASURE, SpdlogConsole>;
 
 }  // namespace experiments

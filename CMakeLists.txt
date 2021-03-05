@@ -6,6 +6,8 @@ project(
 
 cmake_minimum_required(VERSION 3.15)
 
+enable_testing()
+
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
   set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
@@ -15,7 +17,6 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(POSITION_INDEPENDENT_CODE ON)
 
@@ -29,19 +30,22 @@ include(FetchContent)
 FetchContent_Declare(
   doctest
   GIT_REPOSITORY https://github.com/onqtam/doctest.git
-  GIT_TAG 2.4.4
-  GIT_SHALLOW TRUE)
-
+  GIT_TAG 2.4.4)
 set(DOCTEST_WITH_TESTS OFF)
 FetchContent_MakeAvailable(doctest)
+
+# Add spdlog
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+  GIT_TAG v1.8.2)
+FetchContent_MakeAvailable(spdlog)
 
 # Add benchmark
 FetchContent_Declare(
   benchmark
   GIT_REPOSITORY https://github.com/google/benchmark.git
-  GIT_TAG v1.5.2
-  GIT_SHALLOW TRUE)
-
+  GIT_TAG v1.5.2)
 set(BENCHMARK_ENABLE_TESTING OFF)
 set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
 set(BENCHMARK_ENABLE_ASSEMBLY_TEST OFF)
@@ -156,5 +160,3 @@ add_custom_target(
   format
   DEPENDS .format_cpp_stamp .format_cmake_stamp
   COMMENT "Format Bash, C++, and CMake files.")
-
-enable_testing()

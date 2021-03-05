@@ -3,7 +3,7 @@
 #include "message.hpp"
 
 int main() {
-  experiments::MeasureStdout("Do something with a measure\n")();
-  experiments::DimensionStderr()();
+  experiments::MeasureWithSpdlog("Log all measure information using spdlog.")();
+  experiments::DimensionWithStdout()();
   return EXIT_SUCCESS;
 }
