@@ -19,7 +19,6 @@ void detail::Logger<detail::OutputType::STDOUT>::log(const std::string& msg) {
 
   binlog::TextOutputStream output(std::cout);
   binlog::consume(output);
-
 }
 
 }  // namespace experiments
