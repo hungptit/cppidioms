@@ -1,5 +1,6 @@
 #include "predictors.hpp"
 
+#include <binlog/TextOutputStream.hpp>
 #include <iostream>
 #include <string>
 
@@ -16,7 +17,6 @@ void detail::Logger<detail::OutputType::SPDLOG>::log(const std::string& msg) {
 void detail::Logger<detail::OutputType::STDOUT>::log(const std::string& msg) {
   BINLOG_INFO("Use binlog.");
   BINLOG_INFO("{}", msg);
-
   binlog::TextOutputStream output(std::cout);
   binlog::consume(output);
 }
