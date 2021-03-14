@@ -112,8 +112,11 @@ include(sanitizers)
 include(tools)
 include(dependency-graph)
 
-add_compile_options(-pedantic)
-add_compile_options(-pedantic-errors)
+if(MSVC)
+  add_compile_options(/W2 /WX)
+else()
+  add_compile_options(-Wall -Wextra -pedantic -Werror -static)
+endif()
 
 # Add sub-directories
 add_subdirectory(src)
